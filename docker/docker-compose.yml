@@ -1,0 +1,71 @@
+# mail@dongguochao.com
+
+version: '2.2'
+
+services:
+  platform:
+    container_name: platform-framework
+
+    ######## build from Dockerfile ###########
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    ######## End -> build from Dockerfile ###########
+
+    environment:
+      # if you have your own mysql, config it here, and disable the 'mysql' config blow
+      - MYSQL_URL=cat-mysql # links will maintain /etc/hosts, just use 'container_name'
+      - MYSQL_PORT=3306
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWD=
+      - MYSQL_SCHEMA=cat
+
+    working_dir: /app
+    volumes:
+      # 默认127.0.0.1，可以修改为自己真实的服务器集群地址
+      - "./client.xml:/data/appdatas/cat/client.xml"
+      # 默认使用环境变量设置。可以启用本注解，并修改为自己的配置
+      # - "./datasources.xml:/data/appdatas/cat/datasources.xml"
+    command: /bin/sh -c 'chmod +x /datasources.sh && /datasources.sh && catalina.sh run'
+    links:
+      - mysql
+      - redis
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "8080:8080"
+      - "2280:2280"
+
+  # disable this if you have your own mysql
+  mysql:
+    container_name: mysql
+    image: mariadb:10.2
+    # expose 33306 to client (navicat)
+    # user: "1000:50"
+    # user: "1000"
+    ports:
+       - 33306:3306
+    volumes:
+      - "./mysql/volume:/var/lib/mysql/data"
+      # 第一次启动，可以通过命令创建数据库表 ：
+      # docker exec 容器id bash -c "mysql -uroot -Dcat < /init.sql"
+      - "../_sql/platform.sql:/platform.sql"
+      - "../_sql/sys_region.sql:/sys_region.sql"
+    command: mysqld -uroot --character-set-server=utf8mb4
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=platform-shop
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=cjl1234
+
+  redis:
+    image: redis
+    container_name: my_redis
+    #  command: redis-server --requirepass yourpassword
+    command: redis-server --requirepass cjl1234
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
+
