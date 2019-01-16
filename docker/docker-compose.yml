@@ -13,6 +13,8 @@ services:
     ######## End -> build from Dockerfile ###########
 
     working_dir: /app
+    command: /bin/sh -c 'catalina.sh run'
+
     depends_on:
       - mysql
       - redis
