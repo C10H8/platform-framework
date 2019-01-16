@@ -12,13 +12,15 @@ services:
       dockerfile: ./docker/Dockerfile
     ######## End -> build from Dockerfile ###########
 
-    environment:
+    #environment:
       # if you have your own mysql, config it here, and disable the 'mysql' config blow
-      - MYSQL_URL=cat-mysql # links will maintain /etc/hosts, just use 'container_name'
-      - MYSQL_PORT=3306
-      - MYSQL_USERNAME=root
-      - MYSQL_PASSWD=
-      - MYSQL_SCHEMA=cat
+      #- MYSQL_URL=cat-mysql # links will maintain /etc/hosts, just use 'container_name'
+      #- MYSQL_PORT=3306
+      #- MYSQL_USERNAME=root
+      #- MYSQL_PASSWD=cjl1234
+      #- MYSQL_SCHEMA=platform-shop
+
+
 
     working_dir: /app
     volumes:
