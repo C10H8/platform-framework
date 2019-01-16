@@ -16,28 +16,27 @@ services:
     command: /bin/sh -c 'catalina.sh run'
 
     depends_on:
-      - mysql
       - redis
     ports:
       - "8080:8080"
 
-  mysql:
-    container_name: mysql
-    image: mariadb:10.2
-    ports:
-       - 33306:3306
-    volumes:
-      - "./mysql/volume:/var/lib/mysql/data"
-      # 第一次启动，可以通过命令创建数据库表 ：
-      # docker exec 容器id bash -c "mysql -uroot -pcjl1234 -Dplatform-shop < /platform.sql"
-      - "../_sql/platform.sql:/platform.sql"
-      - "../_sql/sys_region.sql:/sys_region.sql"
-    command: mysqld -uroot --character-set-server=utf8mb4
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=platform-shop
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=
+#  mysql:
+#    container_name: mysql
+#    image: mariadb:10.2
+#    ports:
+#       - 33306:3306
+#    volumes:
+#      - "./mysql/volume:/var/lib/mysql/data"
+#      # 第一次启动，可以通过命令创建数据库表 ：
+#      # docker exec 容器id bash -c "mysql -uroot -pcjl1234 -Dplatform-shop < /platform.sql"
+#      - "../_sql/platform.sql:/platform.sql"
+#      - "../_sql/sys_region.sql:/sys_region.sql"
+#    command: mysqld -uroot --character-set-server=utf8mb4
+#    environment:
+#      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+#      - MYSQL_DATABASE=platform-shop
+#      - MYSQL_USER=root
+#      - MYSQL_PASSWORD=
 
   redis:
     image: redis
