@@ -19,13 +19,9 @@ services:
     ports:
       - "8080:8080"
 
-  # disable this if you have your own mysql
   mysql:
     container_name: mysql
     image: mariadb:10.2
-    # expose 33306 to client (navicat)
-    # user: "1000:50"
-    # user: "1000"
     ports:
        - 33306:3306
     volumes:
@@ -34,12 +30,12 @@ services:
       # docker exec 容器id bash -c "mysql -uroot -pcjl1234 -Dplatform-shop < /platform.sql"
       - "../_sql/platform.sql:/platform.sql"
       - "../_sql/sys_region.sql:/sys_region.sql"
-    command: mysqld -uroot -pcjl1234 --character-set-server=utf8mb4
+    command: mysqld -uroot --character-set-server=utf8mb4
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=platform-shop
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=cjl1234
+      - MYSQL_PASSWORD=
 
   redis:
     image: redis
